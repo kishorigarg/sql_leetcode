@@ -60,3 +60,79 @@ LEFT JOIN examinations AS e
 GROUP BY s.student_id, s.student_name, sub.subject_name
 
 ORDER BY s.student_id, sub.subject_name;
+
+
+13-(570)
+# Write your MySQL query statement below
+select w.name 
+from employee as w
+cross join employee as e 
+on w.id=e.managerId 
+group by w.id 
+having  count(e.managerId)>=5; 
+
+14-(1934)
+SELECT 
+    s.user_id,
+    IFNULL(ROUND(SUM(c.action = 'confirmed') / COUNT(c.user_id), 2), 0) AS confirmation_rate
+FROM signups s
+LEFT JOIN confirmations c ON 
+s.user_id = c.user_id
+GROUP BY s.user_id;
+
+
+15-(620)
+# Write your MySQL query statement below
+select * from cinema 
+where id%2 !=0
+and  description != 'boring'
+ order by rating desc;
+
+ 16-(1251)
+ # Write your MySQL query statement below
+SELECT p.product_id, IFNULL(ROUND(SUM(units*price)/SUM(units),2),0) AS average_price
+FROM Prices p LEFT JOIN UnitsSold u
+ON p.product_id = u.product_id AND
+u.purchase_date BETWEEN start_date AND end_date
+group by product_id;
+
+17-(1075)
+# Write your MySQL query statement below
+select p.project_id, round(avg(
+    e.experience_years
+),2) as average_years 
+from project as p
+inner join 
+employee as e
+on p.employee_id=e.employee_id
+group by p.project_id;
+
+18-(1633)
+SELECT r.contest_id, 
+       ROUND((COUNT(r.user_id) * 100.0 / (SELECT COUNT(*) FROM users)), 2) AS percentage
+FROM users AS u
+INNER JOIN register AS r 
+ON u.user_id = r.user_id
+GROUP BY r.contest_id
+ORDER BY percentage DESC, r.contest_id ASC;
+
+
+19-(1211)
+SELECT 
+    query_name,
+    ROUND(AVG(rating / NULLIF(position, 0)), 2) AS quality,
+    ROUND(SUM(rating < 3) * 100.0 / COUNT(rating), 2) AS poor_query_percentage
+FROM queries
+GROUP BY query_name;
+
+
+20(1173)
+SELECT 
+    DATE_FORMAT(trans_date, '%Y-%m') AS month,
+    country,
+    COUNT(*) AS trans_count, 
+    SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,
+    SUM(amount) AS trans_total_amount,
+    SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount
+FROM transactions 
+GROUP BY month, country;
